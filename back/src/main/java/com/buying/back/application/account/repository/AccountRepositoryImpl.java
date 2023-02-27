@@ -9,8 +9,6 @@ import com.buying.back.application.account.service.vo.QNormalAccountManagementVO
 import com.buying.back.util.querydsl.CustomQuerydslRepositorySupport;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,16 +34,6 @@ public class AccountRepositoryImpl extends CustomQuerydslRepositorySupport
       .where(whereCondition);
 
     return applyPagination(pageable, query, countQuery);
-  }
-
-  @Override
-  public List<Account> findAllBirthDayAccountWithCursor(LocalDate today, long cursor, long limit) {
-    return selectFrom(account)
-      .where(account.id.gt(cursor)
-        .and(account.birthDay.eq(today)))
-      .orderBy(account.id.asc()) // 오름차순으로 순서 정렬 주의
-      .limit(limit)
-      .fetch();
   }
 
   private QNormalAccountManagementVO getAccountManagementVO() {
