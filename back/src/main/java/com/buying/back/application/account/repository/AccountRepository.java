@@ -14,10 +14,5 @@ public interface AccountRepository extends JpaRepository<Account, Long>,
 
   Optional<Account> findByEmail(String email);
 
-  /*
-
- @Query(value = "select u.* from user u where BINARY(u.login_id) = :loginId", nativeQuery = true)
-  Optional<User> findByBinaryId(@Param("loginId") String loginId);
-   */
 
 }

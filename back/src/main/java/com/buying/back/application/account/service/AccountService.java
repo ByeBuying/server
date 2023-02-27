@@ -6,9 +6,13 @@ import com.buying.back.application.account.controller.dto.account.CreateAccountD
 import com.buying.back.application.account.controller.dto.management.SearchAccountManagementDTO;
 import com.buying.back.application.account.controller.dto.management.UpdateActivateAccountDTO;
 import com.buying.back.application.account.domain.Account;
+import com.buying.back.application.account.helper.AccountCouponHelper;
 import com.buying.back.application.account.repository.AccountRepository;
+import com.buying.back.application.account.service.vo.AccountCouponVO;
 import com.buying.back.application.account.service.vo.AccountDefaultVO;
 import com.buying.back.application.account.service.vo.NormalAccountManagementVO;
+import com.buying.back.application.common.dto.PagingDTO;
+import com.buying.back.application.coupon.service.vo.CouponVO;
 import com.buying.back.util.email.HtmlEmailType;
 import com.buying.back.util.email.provider.EmailProvider;
 import com.buying.back.util.email.template.AccountEmailTemplate;
@@ -28,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AccountService {
 
   private final AccountRepository accountRepository;
+  private final AccountCouponHelper accountCouponHelper;
   private final PasswordProvider passwordProvider;
   private final EmailProvider emailProvider;
 
@@ -55,6 +60,12 @@ public class AccountService {
     Account account = accountRepository.findById(loginUserId)
       .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
     return new AccountDefaultVO(account);
+  }
+
+  public Page<AccountCouponVO> getMyCouponList(Long loginUserId, PagingDTO dto) {
+    Account account = accountRepository.findById(loginUserId)
+      .orElseThrow(() -> new AccountException(AccountExceptionCode.NOT_FOUND_ACCOUNT));
+    return accountCouponHelper.getCouponListByAccount(dto, account);
   }
 
   // management
